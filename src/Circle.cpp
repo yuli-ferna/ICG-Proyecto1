@@ -32,29 +32,35 @@ void CCircle::display()
 	int r = dx;
 	x = 0;
 	y = r;   
-	int d = 1 - r;
 	if (dy > dx)
 	{
 		r = dy;
 		y = r;
 	}
+	drawCircle(x0, y0, x, y, r);
+	
+
+}
+
+void CCircle::drawCircle(int x0, int y0, int x, int y, int r)
+{
+	int d = 1 - r;
 
 	draw4Points(x0, y0, r);
 	while (y > x) {
-		
+
 		if (d < 0)
 		{
 			d += (x << 1) + 3;
 		}
 		else {
 			d += ((x - y) << 1) + 5;
-			y += - 1;
+			y += -1;
 		}
 		x += 1;
 		draw8Points(x0, y0, x, y);
 
 	}
-
 }
 
 void CCircle::draw4Points(int cx, int cy, int r)
