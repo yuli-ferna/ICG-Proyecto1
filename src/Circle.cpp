@@ -26,7 +26,7 @@ void CCircle::display()
 	x1 = mVertices[1][0];
 	y1 = mVertices[1][1];
 	//printf("%d\n", x0);
-	
+	bool fill = true;
 	dx = abs(x0 - x1);
 	dy = abs(y0 - y1);
 	int r = dx;
@@ -37,12 +37,12 @@ void CCircle::display()
 		r = dy;
 		y = r;
 	}
-	drawCircle(x0, y0, x, y, r);
+	drawCircle(x0, y0, x, y, r, true);
 	
 
 }
 
-void CCircle::drawCircle(int x0, int y0, int x, int y, int r)
+void CCircle::drawCircle(int x0, int y0, int x, int y, int r, bool fill)
 {
 	int d = 1 - r;
 
@@ -58,7 +58,7 @@ void CCircle::drawCircle(int x0, int y0, int x, int y, int r)
 			y += -1;
 		}
 		x += 1;
-		draw8Points(x0, y0, x, y);
+		draw8Points(x0, y0, x, y, fill);
 
 	}
 }
@@ -66,24 +66,45 @@ void CCircle::drawCircle(int x0, int y0, int x, int y, int r)
 void CCircle::draw4Points(int cx, int cy, int r)
 {
 	
-	glBegin(GL_POINTS);
-	glVertex2i(cx, cy + r);
-	glVertex2i(cx + r, cy);
-	glVertex2i(cx, cy - r);
-	glVertex2i(cx - r, cy);
-	glEnd();
+	PutPixel(cx, cy + r, mColor);
+	PutPixel(cx + r, cy, mColor);
+	PutPixel(cx, cy - r, mColor);
+	PutPixel(cx - r, cy, mColor);
+
 }
 
-void CCircle::draw8Points(int cx, int cy, int rx, int ry)
+void CCircle::draw8Points(int cx, int cy, int rx, int ry, bool fill)
 {
+	/**/
+	if (fill) 
+	{
+		drawLine(cx -rx + 1, cy + ry, cx + rx - 1);
+		drawLine(cx -ry + 1, cy + rx, cx + ry - 1);
+		drawLine(cx -ry + 1, cy + -rx, cx + ry - 1);
+		drawLine(cx -rx + 1, cy + -ry, cx + rx - 1);
+	}*/
+	PutPixel(cx + rx, cy + ry, mColor);
+	PutPixel(cx + rx, cy - ry, mColor);
+	PutPixel(cx - rx, cy + ry, mColor);
+	PutPixel(cx - rx, cy - ry, mColor);
+	PutPixel(cx + ry, cy + rx, mColor);
+	PutPixel(cx + ry, cy - rx, mColor);
+	PutPixel(cx - ry, cy + rx, mColor);
+	PutPixel(cx - ry, cy - rx, mColor);
+}
+void CCircle::drawLine(int xmin, int y, int xmax)
+{
+	for (int i = xmin; i < xmax; i++)
+	{
+		PutPixel(i, y, mRColor);
+	}
+}
+
+void CCircle::PutPixel(int x, int y, float color[3])
+{
+	glColor3fv(color);
+
 	glBegin(GL_POINTS);
-	glVertex2i(cx + rx, cy + ry);
-	glVertex2i(cx + rx, cy - ry);
-	glVertex2i(cx - rx, cy + ry);
-	glVertex2i(cx - rx, cy - ry);
-	glVertex2i(cx + ry, cy + rx);
-	glVertex2i(cx + ry, cy - rx);
-	glVertex2i(cx - ry, cy + rx);
-	glVertex2i(cx - ry, cy - rx);
+	glVertex2i(x, y);
 	glEnd();
 }

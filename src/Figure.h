@@ -33,4 +33,5 @@ public:
 	float* getColor();
 	float* getRColor();
 	void swap(int &a, int &b);
+
 };
