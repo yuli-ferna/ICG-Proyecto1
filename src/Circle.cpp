@@ -46,11 +46,10 @@ void CCircle::drawCircle(int x0, int y0, int x, int y, int r, bool fill)
 {
 	int d = 1 - r;
 
-	//draw4Points(x0, y0, r);
 	if (fill)
 	{
+		//Linea del medio (caso borde)
 		drawLine(x0 - r, y0, x0 + r);
-
 	}
 	draw8Points(x0, y0, x, y, false);
 
@@ -70,25 +69,15 @@ void CCircle::drawCircle(int x0, int y0, int x, int y, int r, bool fill)
 	}
 }
 
-void CCircle::draw4Points(int cx, int cy, int r)
-{
-	
-	PutPixel(cx, cy + r, mColor);
-	PutPixel(cx + r, cy, mColor);
-	PutPixel(cx, cy - r, mColor);
-	PutPixel(cx - r, cy, mColor);
-
-}
-
 void CCircle::draw8Points(int cx, int cy, int rx, int ry, bool fill)
 {
 	
 	if (fill) 
 	{
-		drawLine(cx -rx, cy + ry-1, cx + rx+1);
-		drawLine(cx -ry+1, cy + rx , cx + ry );
-		drawLine(cx -ry+1, cy - rx , cx + ry );
-		drawLine(cx -rx, cy - ry+1, cx + rx+1);
+		drawLine(cx -rx, cy + ry - 1, cx + rx + 1);
+		drawLine(cx -ry + 1, cy + rx , cx + ry );
+		drawLine(cx -ry + 1, cy - rx , cx + ry );
+		drawLine(cx -rx, cy - ry + 1, cx + rx + 1);
 	}
 	PutPixel(cx + rx, cy + ry, mColor);
 	PutPixel(cx + rx, cy - ry, mColor);
@@ -113,49 +102,5 @@ void CCircle::PutPixel(int x, int y, float color[3])
 
 	glBegin(GL_POINTS);
 	glVertex2i(x, y);
-	glEnd();
-}
-
-void CCircle::drawLineC0a45(int x0, int y0, int x1, int y1) {
-	int dx, dy, x, y, d, incrE, incrNE;
-	glColor3fv(mRColor);
-	glBegin(GL_POINTS);
-
-	//Delta x y y
-	dx = x1 - x0;
-	dy = y1 - y0;
-
-	if (dy > dx) {
-
-	}
-
-	//Función paramétrica de la recta
-	//Se le multiplica dos para evitar división
-	d = dx - (dy << 1);
-	//Incremento en ...
-	incrE = -(dy << 1);
-	incrNE = ((dx - dy) << 1);
-
-	//Asigno las coordenadas del primer punto
-	x = x0;
-	y = y0;
-
-	//Dibuja primer punto
-	glVertex2i(x0, y0);
-	while (x < x1) {
-		//Pintar noreste
-		if (d <= 0) {
-			d = d + incrNE;
-			y = y + 1;
-		}
-		//Pintar este
-		else {
-			d = d + incrE;
-		}
-		x = x + 1;
-		glVertex2i(x, y);
-	}
-
-
 	glEnd();
 }
