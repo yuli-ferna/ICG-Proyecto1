@@ -3,7 +3,7 @@
 CFigure::CFigure()
 {
 	mColor[0] = mColor[1] = mColor[2] = 0.0f;
-	mRColor[0] = mRColor[1] = mRColor[2] = 1.0f;
+	mRColor[0] = mRColor[1] = mRColor[2] = 0.7f;
 }
 
 CFigure::~CFigure()
