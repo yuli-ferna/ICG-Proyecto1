@@ -35,6 +35,9 @@
     <ClInclude Include="..\src\Elipse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\CurveB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Figure.cpp">
@@ -59,6 +62,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Elipse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CurveB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

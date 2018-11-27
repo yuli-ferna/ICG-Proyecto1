@@ -117,6 +117,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Circle.h" />
+    <ClInclude Include="..\src\CurveB.h" />
     <ClInclude Include="..\src\Elipse.h" />
     <ClInclude Include="..\src\Figure.h" />
     <ClInclude Include="..\src\Line.h" />
@@ -127,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Circle.cpp" />
+    <ClCompile Include="..\src\CurveB.cpp" />
     <ClCompile Include="..\src\Elipse.cpp" />
     <ClCompile Include="..\src\Figure.cpp" />
     <ClCompile Include="..\src\Line.cpp" />
