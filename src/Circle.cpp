@@ -47,6 +47,11 @@ void CCircle::drawCircle(int x0, int y0, int x, int y, int r, bool fill)
 	int d = 1 - r;
 
 	//draw4Points(x0, y0, r);
+	if (fill)
+	{
+		drawLine(x0 - r, y0, x0 + r);
+
+	}
 	draw8Points(x0, y0, x, y, false);
 
 	while (y > x) {
