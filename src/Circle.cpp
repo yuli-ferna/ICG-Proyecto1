@@ -124,7 +124,8 @@ void CCircle::boundingBox()
 		r = dy;
 		y = r;
 	}
-	pintarContorno(dx + x0 - 2, dy + y0 + 2, -dx + x0 + 2, -dy + y0 + 2, mColor);
+	pintarContorno(r + x0 + 2, r + y0 + 2, -r + x0 - 2, -r + y0 - 2, mColor);
+
 
 }
 
