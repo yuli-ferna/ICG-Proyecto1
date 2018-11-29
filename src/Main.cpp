@@ -182,7 +182,40 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 				
 			}
 			break;
+		case GLFW_KEY_U:
+			if (picked > -1)
+			{
 
+				for (int i = picked; i < figures.size() - 1; i++)
+				{
+					CFigure *aux = figures[i];
+					figures[i] = figures[i + 1];
+					figures[i + 1] = aux;
+				}
+				picked = figures.size() - 1;
+				/*picked = -1;
+				delete figures[figures.size() - 1];
+				figures.pop_back();*/
+
+			}
+			break;
+		case GLFW_KEY_D:
+			if (picked > -1)
+			{
+
+				for (int i = picked; i > 0; i--)
+				{
+					CFigure *aux = figures[i];
+					figures[i] = figures[i - 1];
+					figures[i - 1] = aux;
+				}
+				picked = 0;
+				/*picked = -1;
+				delete figures[figures.size() - 1];
+				figures.pop_back();*/
+
+			}
+			break;
 		}
 
 	}
