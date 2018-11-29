@@ -23,13 +23,30 @@ void CQuad::display()
 	y0 = mVertices[0][1];
 	x1 = mVertices[1][0];
 	y1 = mVertices[1][1];
+	setBoundingBox();
 
-	//pintarContorno(x0, y0, x1, y1, mColor);
-	//glColor3fv(mRColor);
-
-	rellenoCuadrado(x0, y0, x1, y1, mColor, mRColor);
-
+	if (relleno)
+	{
+		rellenoCuadrado(x0, y0, x1, y1, mColor, mRColor);
+	}
+	else
+	{
+		pintarContorno(x0, y0, x1, y1, mColor);
+	}
 	
+
+}
+
+void CQuad::setBoundingBox(bool bb)
+{
+	int x0, y0, x1, y1, dx, dy, caso = 1;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	glColor3fv(mRColor);
+	pintarContorno(x0, y0, x1, y1, mRColor);
+
 }
 
 void CQuad::rellenoCuadrado(int x0, int y0, int x1, int y1, float mColor[3], float fillColor[3]) {

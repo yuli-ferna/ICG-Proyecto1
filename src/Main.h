@@ -4,6 +4,11 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+struct pair
+{
+	int x, y;
+};
+
 void pick(int x, int y);
 
 void updateUserInterface();

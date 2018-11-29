@@ -16,6 +16,7 @@ private:
 	float mFigureColor[3];
 	float mFigureRColor[3];
 	string mFigureType;
+	bool fill;
 
 public:
 	///Method to obtain the only instance of the calls
@@ -27,8 +28,11 @@ public:
 	void setFigureColor(float *color);
 	void setFigureRColor(float *color);
 	void setFigureType(string type);
+	void setFill(bool f);
+	bool getFill();
 	float* getFigureColor();
 	float* getFigureRColor();
+
 
 private:
 	///Private constructor

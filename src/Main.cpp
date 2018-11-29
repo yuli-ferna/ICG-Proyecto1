@@ -4,6 +4,7 @@
 #include "Triangle.h"
 #include "Circle.h"
 #include "Elipse.h"
+#include "CurveB.h"
 #include "UserInterface.h"
 
 using std::vector;
@@ -14,12 +15,20 @@ bool gPress;
 CUserInterface * userInterface;
 vector <CFigure *> figures;
 FigureType figureSelected;
+
 int picked;
-int nLinea = 0;
+int nLinea = 0, nPunto = 0;
+
+vector< pair > puntosC;
 float ptox, ptoy, ptox2, ptoy2;
 
 void pick(int x, int y)
 {
+	if (picked > -1)
+	{
+		//Deseleccionar
+		figures[picked]->setBoundingBox(false);
+	}
 	picked = -1;
 	userInterface->hide();
 
@@ -40,12 +49,13 @@ void pick(int x, int y)
 
 		if (x >= min[0] && x <= max[0] && y >= min[1] && y <= max[1])
 		{
+			//Seleccionar
 			picked = i;
 
 			userInterface->setFigureColor(figures[picked]->getColor());
 			userInterface->setFigureRColor(figures[picked]->getRColor());
 			userInterface->show();
-
+			
 			int type = figures[picked]->getType();
 
 			if (type == LINE)
@@ -56,6 +66,8 @@ void pick(int x, int y)
 				userInterface->setFigureType("Triangle");
 			else if (type == ELIPSE)
 				userInterface->setFigureType("Elipse");
+			else if (type == BCURVE)
+				userInterface->setFigureType("Bezier Curve");
 			else
 				userInterface->setFigureType("Quad");
 
@@ -70,8 +82,13 @@ void updateUserInterface()
 	{
 		float * color = userInterface->getFigureColor();
 		float * colorR = userInterface->getFigureRColor();
+		bool rell = userInterface->getFill();
 		figures[picked]->setColor(color[0], color[1], color[2]);
 		figures[picked]->setRColor(colorR[0], colorR[1], colorR[2]);
+		figures[picked]->setRelleno(rell);
+		//Seleccionar
+
+		figures[picked]->setBoundingBox(true);
 	}
 }
 
@@ -142,6 +159,11 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 			userInterface->hide();
 			break;
 
+		case GLFW_KEY_B:
+			figureSelected = BCURVE;
+			userInterface->hide();
+			break;
+
 		}
 
 	}
@@ -207,6 +229,33 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods)
 
 			}
 		}
+		else if (figureSelected == BCURVE)
+		{
+			if (nPunto < 3) {
+				pair aux;
+				aux.x = ax;
+				aux.y = ay;
+				puntosC.push_back(aux);
+				nPunto++;
+
+			}
+			else
+			{
+				CCurveB *curve = new CCurveB();
+				int length = puntosC.size();
+				for (int ii = 0; ii < length; ii++)
+				{
+					curve->setVertex(ii, puntosC[ii].x, puntosC[ii].y);
+
+				}
+				curve->setVertex(length, ax, ay);
+				figures.push_back(curve);
+				nPunto = 0;
+				puntosC.clear();
+				gPress = false;
+
+			}
+		}
 		else if (figureSelected == ELIPSE)
 		{
 			CElipse *elipse = new CElipse();
@@ -242,12 +291,22 @@ void cursorPos(GLFWwindow* window, double x, double y)
 		float ay = gHeight - float(y);
 
 		figures.back()->setVertex(2, ax, ay);
-	} else if (gPress)
+	}
+	/*??????*/
+	else if (gPress && (figureSelected == BCURVE))
+	{
+		float ax = float(x);
+		float ay = gHeight - float(y);
+
+		figures.back()->setVertex(3, ax, ay);
+	}
+	else if (gPress)
 	{
 		float ax = float(x);
 		float ay = gHeight - float(y);
 
 		figures.back()->setVertex(1, ax, ay);
+
 	}
 
 }

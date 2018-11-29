@@ -35,11 +35,12 @@ CUserInterface::CUserInterface()
 	TwAddVarRO(mUserInterface, "meshType", TW_TYPE_STDSTRING, &mFigureType, "label='Type' readonly=true");
 	TwAddVarRW(mUserInterface, "color", TW_TYPE_COLOR3F, &mFigureColor[0], "label = 'Color'");
 	
-	if(mFigureType != "Line")
-	{
-		TwAddSeparator(mUserInterface, "sep1", NULL);
-		TwAddVarRW(mUserInterface, "colorR", TW_TYPE_COLOR3F, &mFigureRColor[0], "label = 'Color Relleno'");
-	}
+	
+	TwAddSeparator(mUserInterface, "sep1", NULL);
+	TwAddVarRW(mUserInterface, "colorR", TW_TYPE_COLOR3F, &mFigureRColor[0], "label = 'Color Relleno'");
+	TwAddSeparator(mUserInterface, "sep2", NULL);
+	TwAddVarRW(mUserInterface, "relleno", TW_TYPE_BOOLCPP, &fill, "label = 'Relleno'");
+	
 }
 
 CUserInterface::~CUserInterface()
@@ -78,6 +79,16 @@ void CUserInterface::setFigureRColor(float * color)
 void CUserInterface::setFigureType(string type)
 {
 	mFigureType = type;
+}
+
+void CUserInterface::setFill(bool f)
+{
+	fill = f;
+}
+
+bool CUserInterface::getFill()
+{
+	return fill;
 }
 
 float* CUserInterface::getFigureColor()

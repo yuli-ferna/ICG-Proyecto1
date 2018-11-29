@@ -9,7 +9,8 @@ enum FigureType
 	QUAD,
 	CIRCLE,
 	TRIANGLE,
-	ELIPSE
+	ELIPSE,
+	BCURVE,
 };
 
 class CFigure
@@ -28,6 +29,7 @@ public:
 	void setRelleno(bool r);
 	virtual void display() = 0;
 	int getType();
+	virtual void setBoundingBox(bool bb) = 0;
 	bool getRelleno();
 	float* getVertex(int id);
 	float* getColor();

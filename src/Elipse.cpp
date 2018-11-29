@@ -38,14 +38,14 @@ void CElipse::display()
 
 void CElipse::drawElipse(int cx, int cy, int a, int b, int r) {
 	int x, y, d, aCuadrado, bCuadrado;
-	bool fill = true;
+
 	x = 0;
 	y = b;
 	aCuadrado = a * a;
 	bCuadrado = b * b;
 	d = b * ((b << 2) - (aCuadrado << 2)) + aCuadrado;
 	//Modalidad 1
-	draw4Points(x, y, cx, cy, false);
+	draw4Points(x, y, cx, cy);
 	while (bCuadrado  * ((x + 1) << 1) < aCuadrado *((y << 1) - 1)) {
 
 		if (d < 0)
@@ -56,7 +56,7 @@ void CElipse::drawElipse(int cx, int cy, int a, int b, int r) {
 		}
 		x = x + 1;
 
-		draw4Points(x, y, cx, cy, fill);
+		draw4Points(x, y, cx, cy);
 	}
 
 	//Modalidad 2
@@ -73,17 +73,17 @@ void CElipse::drawElipse(int cx, int cy, int a, int b, int r) {
 
 		}
 		y = y - 1;
-		draw4Points(x, y, cx, cy, fill);
+		draw4Points(x, y, cx, cy);
 	}
 
 
 }
 
-void CElipse::draw4Points(int x, int y, int cx, int cy, bool fill)
+void CElipse::draw4Points(int x, int y, int cx, int cy)
 {
-	if (fill)
+	if (relleno)
 	{
-		/* no tiene fallo de los dos pixeles
+		/* 
 		drawLine(cx - x, cy + y, cx + x + 1);
 		drawLine(cx - x, cy - y, cx + x + 1);*/
 		drawLine(cx - x, cy + y - 1, cx + x + 1);

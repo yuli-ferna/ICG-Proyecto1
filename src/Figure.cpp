@@ -31,9 +31,19 @@ void CFigure::setRColor(float r, float g, float b)
 	mRColor[2] = b;
 }
 
+void CFigure::setRelleno(bool r)
+{
+	relleno = r;
+}
+
 int CFigure::getType()
 {
 	return mType;
+}
+
+bool CFigure::getRelleno()
+{
+	return relleno;
 }
 
 float* CFigure::getVertex(int id)

@@ -4,6 +4,7 @@
 
 CCircle::CCircle()
 {
+	boundB = false;
 	mVertices = new float*[2];
 	for (int i = 0; i < 2; ++i)
 		mVertices[i] = new float[2];
@@ -25,8 +26,7 @@ void CCircle::display()
 	y0 = mVertices[0][1];
 	x1 = mVertices[1][0];
 	y1 = mVertices[1][1];
-	//printf("%d\n", x0);
-	bool fill = true;
+
 	dx = abs(x0 - x1);
 	dy = abs(y0 - y1);
 	int r = dx;
@@ -37,21 +37,21 @@ void CCircle::display()
 		r = dy;
 		y = r;
 	}
-	drawCircle(x0, y0, x, y, r, true);
+	drawCircle(x0, y0, x, y, r);
 	
 
 }
 
-void CCircle::drawCircle(int x0, int y0, int x, int y, int r, bool fill)
+void CCircle::drawCircle(int x0, int y0, int x, int y, int r)
 {
 	int d = 1 - r;
 
-	if (fill)
+	if (relleno)
 	{
 		//Linea del medio (caso borde)
 		drawLine(x0 - r, y0, x0 + r);
 	}
-	draw8Points(x0, y0, x, y, false);
+	draw8Points(x0, y0, x, y);
 
 	while (y > x) {
 
@@ -64,15 +64,15 @@ void CCircle::drawCircle(int x0, int y0, int x, int y, int r, bool fill)
 			y += -1;
 		}
 		x += 1;
-		draw8Points(x0, y0, x, y, fill);
+		draw8Points(x0, y0, x, y);
 
 	}
 }
 
-void CCircle::draw8Points(int cx, int cy, int rx, int ry, bool fill)
+void CCircle::draw8Points(int cx, int cy, int rx, int ry)
 {
 	
-	if (fill) 
+	if (relleno) 
 	{
 		drawLine(cx -rx, cy + ry - 1, cx + rx + 1);
 		drawLine(cx -ry + 1, cy + rx , cx + ry );
