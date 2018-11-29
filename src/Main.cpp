@@ -24,11 +24,7 @@ float ptox, ptoy, ptox2, ptoy2;
 
 void pick(int x, int y)
 {
-	if (picked > -1)
-	{
-		//Deseleccionar
-		figures[picked]->setBoundingBox(false);
-	}
+	
 	picked = -1;
 	userInterface->hide();
 
@@ -118,6 +114,10 @@ void reshape(GLFWwindow *window, int width, int height)
 	glOrtho(0, gWidth, 0, gHeight, -1.0f, 1.0f);
 }
 
+
+
+
+
 void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 	if (TwEventKeyGLFW(key, action))
@@ -165,11 +165,29 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 			figureSelected = BCURVE;
 			userInterface->hide();
 			break;
+		case GLFW_KEY_X:
+			if (picked > -1)
+			{
+
+
+				for (int i = picked; i < figures.size() + 1; i++)
+				{
+					CFigure *aux = figures[i];
+					figures[i] = figures[i + 1];
+					figures[i + 1] = aux;
+				}
+				picked = -1;
+				figures.pop_back();
+
+			}
+			break;
 
 		}
 
 	}
 }
+
+
 
 void mouseButton(GLFWwindow* window, int button, int action, int mods)
 {
@@ -248,7 +266,6 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods)
 				for (int ii = 0; ii < length; ii++)
 				{
 					curve->setVertex(ii, puntosC[ii].x, puntosC[ii].y);
-
 				}
 				curve->setVertex(length, ax, ay);
 				figures.push_back(curve);
@@ -294,7 +311,6 @@ void cursorPos(GLFWwindow* window, double x, double y)
 
 		figures.back()->setVertex(2, ax, ay);
 	}
-	/*??????*/
 	else if (gPress && (figureSelected == BCURVE))
 	{
 		float ax = float(x);

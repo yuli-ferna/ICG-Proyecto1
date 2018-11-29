@@ -43,6 +43,8 @@ void CCurveB::display()
 
 	glEnd();
 
+	//casteljau(punto);
+
 }
 
 void CCurveB::boundingBox()
@@ -184,7 +186,7 @@ void CCurveB::drawLineC45a90(int x0, int y0, int x1, int y1, float color[3]) {
 	glEnd();
 }
 
-
+/*
 void CCurveB::casteljau(vector<pair> points) {
 	vector<pair> C;
 	int length = points.size();
@@ -209,3 +211,4 @@ void CCurveB::casteljau(vector<pair> points) {
 	}
 	glEnd();
 }
+*/

@@ -23,6 +23,24 @@ void CFigure::setColor(float r, float g, float b)
 	mColor[1] = g;
 	mColor[2] = b;
 }
+/*
+void CFigure::swapF(CFigure* a, CFigure* b)
+{
+	CFigure * c = a;
+	a = b;
+	b = c;
+}
+
+void CFigure::eliminar(int picked)
+{
+	int nFig = figures.size();
+	for (int ii = picked; ii < nFig + 1; ii++)
+	{
+		swapF(figures[ii], figures[ii + 1]);
+	}
+	figures.pop_back();
+	picked = -1;
+}*/
 
 void CFigure::setRColor(float r, float g, float b)
 {

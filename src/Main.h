@@ -31,4 +31,8 @@ bool initGlfw();
 
 bool initUserInterface();
 
+//void swapF(CFigure* a, CFigure* b);
+
+//void eliminar(int picked);
+
 int main(void);
