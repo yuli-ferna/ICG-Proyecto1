@@ -168,17 +168,18 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 		case GLFW_KEY_X:
 			if (picked > -1)
 			{
-
-
-				for (int i = picked; i < figures.size() + 1; i++)
+				
+				for (int i = picked; i < figures.size() - 1; i++)
 				{
 					CFigure *aux = figures[i];
 					figures[i] = figures[i + 1];
 					figures[i + 1] = aux;
 				}
-				picked = -1;
-				figures.pop_back();
 
+				picked = -1;
+				delete figures[figures.size() - 1];
+				figures.pop_back();
+				
 			}
 			break;
 
