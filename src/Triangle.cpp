@@ -1,5 +1,6 @@
 #include "Triangle.h"
 #include <stdio.h>
+
 CTriangle::CTriangle()
 {
 	mVertices = new float*[3];
@@ -31,6 +32,68 @@ void CTriangle::display()
 	drawLine(x2, y2, x0, y0);
 	
 
+}
+
+void CTriangle::boundingBox()
+{
+	int x0, y0, x1, y1, x2, y2;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	x2 = mVertices[2][0];
+	y2 = mVertices[2][1];
+
+	rellenoCuadrado(x0 - 2, y0 - 2, x0 + 2, y0 + 2);
+	rellenoCuadrado(x1 - 2, y1 - 2, x1 + 2, y1 + 2);
+	rellenoCuadrado(x2 - 2, y2 - 2, x2 + 2, y2 + 2);
+
+}
+
+void CTriangle::rellenoCuadrado(int x0, int y0, int x1, int y1) {
+
+	int xmin, xmax, ymin, ymax, it;
+	xmin = x0;
+	xmax = x1;
+	ymin = y0;
+	ymax = y1;
+
+	if (x0 > x1)
+	{
+		xmax = x0;
+		xmin = x1;
+
+	}
+	if (y0 > y1)
+	{
+		ymax = y0;
+		ymin = y1;
+	}
+	glColor3fv(mColor);
+
+	//Colorear dos primeras lineas
+	drawLineC0a45(xmin, ymin, xmax, ymin);
+	drawLineC0a45(xmin, ymax, xmax, ymax);
+	it = ymin + 1;
+
+	for (int i = it; i < ymax; i++)
+	{
+		PutPixel(xmin, i, mColor);
+		drawLineC0a45(xmin + 1, i, xmax - 1, i);
+		PutPixel(xmax, i, mColor);
+
+	}
+
+
+}
+
+void CTriangle::PutPixel(int x, int y, float mColor[3])
+{
+	glColor3fv(mColor);
+
+	glBegin(GL_POINTS);
+	glVertex2i(x, y);
+	glEnd();
 }
 
 //Principales

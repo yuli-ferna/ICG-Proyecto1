@@ -1,5 +1,6 @@
 #include "Quad.h"
 #include "Line.h"
+#include <stdio.h>
 
 CQuad::CQuad()
 {
@@ -18,13 +19,13 @@ CQuad::~CQuad()
 
 void CQuad::display()
 {
-	int x0, y0, x1, y1, dx, dy, caso = 1;
+	int x0, y0, x1, y1, dx, dy;
 	x0 = mVertices[0][0];
 	y0 = mVertices[0][1];
 	x1 = mVertices[1][0];
 	y1 = mVertices[1][1];
-	setBoundingBox();
-
+	
+	
 	if (relleno)
 	{
 		rellenoCuadrado(x0, y0, x1, y1, mColor, mRColor);
@@ -37,17 +38,22 @@ void CQuad::display()
 
 }
 
-void CQuad::setBoundingBox(bool bb)
+void CQuad::boundingBox()
 {
-	int x0, y0, x1, y1, dx, dy, caso = 1;
+	int x0, y0, x1, y1, dx, dy;
 	x0 = mVertices[0][0];
 	y0 = mVertices[0][1];
 	x1 = mVertices[1][0];
 	y1 = mVertices[1][1];
-	glColor3fv(mRColor);
-	pintarContorno(x0, y0, x1, y1, mRColor);
+
+	rellenoCuadrado(x0 - 2, y0 - 2, x0 + 2, y0 + 2, mColor, mColor);
+	rellenoCuadrado(x1 - 2, y0 - 2, x1 + 2, y0 + 2, mColor, mColor);
+	rellenoCuadrado(x0 - 2, y1 - 2, x0 + 2, y1 + 2, mColor, mColor);
+	rellenoCuadrado(x1 - 2, y1 - 2, x1 + 2, y1 + 2, mColor, mColor);
+
 
 }
+
 
 void CQuad::rellenoCuadrado(int x0, int y0, int x1, int y1, float mColor[3], float fillColor[3]) {
 

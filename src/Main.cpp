@@ -86,9 +86,6 @@ void updateUserInterface()
 		figures[picked]->setColor(color[0], color[1], color[2]);
 		figures[picked]->setRColor(colorR[0], colorR[1], colorR[2]);
 		figures[picked]->setRelleno(rell);
-		//Seleccionar
-
-		figures[picked]->setBoundingBox(true);
 	}
 }
 
@@ -99,6 +96,11 @@ void display()
 
 	for (unsigned int i = 0; i < figures.size(); i++)
 		figures[i]->display();
+
+	if (picked > -1)
+	{
+		figures[picked]->boundingBox();
+	}
 }
 
 void reshape(GLFWwindow *window, int width, int height)

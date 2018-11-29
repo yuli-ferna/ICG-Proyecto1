@@ -17,7 +17,7 @@ class CFigure
 {
 protected:
 	float **mVertices, mColor[3], mRColor[3];
-	bool relleno;
+	bool relleno, boundB;
 	int mType;
 
 public:
@@ -28,8 +28,10 @@ public:
 	void setRColor(float r, float g, float b);
 	void setRelleno(bool r);
 	virtual void display() = 0;
+	virtual void boundingBox() = 0;
 	int getType();
-	virtual void setBoundingBox(bool bb) = 0;
+	void setBoundingBox(bool bb);
+	bool getBoundingBox();
 	bool getRelleno();
 	float* getVertex(int id);
 	float* getColor();

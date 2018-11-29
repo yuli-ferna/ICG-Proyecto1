@@ -41,6 +41,16 @@ int CFigure::getType()
 	return mType;
 }
 
+void CFigure::setBoundingBox(bool bb)
+{
+	boundB = bb;
+}
+
+bool CFigure::getBoundingBox()
+{
+	return boundB;
+}
+
 bool CFigure::getRelleno()
 {
 	return relleno;
