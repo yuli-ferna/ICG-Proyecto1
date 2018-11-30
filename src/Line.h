@@ -8,7 +8,8 @@ class CLine : public CFigure
 		CLine();
 		~CLine();
 		void boundingBox();
-		void rellenoCuadrado(int x0, int y0, int x1, int y1);
+		void getMedio(int & mx, int & my);
+		void move(int xNew, int yNew);
 		void PutPixel(int x, int y, float mColor[3]);
 		void drawLineC0a45(int x0, int y0, int x1, int y1);
 		void drawLineC45a90(int x0, int y0, int x1, int y1);

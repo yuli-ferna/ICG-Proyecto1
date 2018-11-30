@@ -54,6 +54,41 @@ void CElipse::boundingBox()
 	
 }
 
+void CElipse::move(int xNew, int yNew)
+{
+	int cx, cy, x, y, a, b, bx;
+	cx = mVertices[0][0];
+	cy = mVertices[0][1];
+	x = mVertices[1][0];
+	y = mVertices[1][1];
+
+	int dx, dy;
+	dx = abs(x - cx);
+	dy = abs(y - cy);
+	int r = dy;
+	a = dx; //El y se mantiene
+	b = dy; //Tiene que ser una altura
+
+	int puntoRestarX;
+	int puntoRestarY;
+	getMedio(puntoRestarX, puntoRestarY);
+	xNew = (xNew - puntoRestarX);
+	yNew = (yNew - puntoRestarY);
+	mVertices[0][0] = cx + xNew;
+	mVertices[0][1] = cy + yNew;
+	mVertices[1][0] = x + xNew;
+	mVertices[1][1] = y + yNew;
+}
+
+void CElipse::getMedio(int &mx, int &my)
+{
+	int x0, y0;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	my = y0;
+	mx = x0;
+}
+
 void CElipse::pintarContorno(int x0, int y0, int x1, int y1, float mColor[3]) {
 
 	if (x0 <= x1)

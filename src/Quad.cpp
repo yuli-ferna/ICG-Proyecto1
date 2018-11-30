@@ -1,6 +1,7 @@
 #include "Quad.h"
 #include "Line.h"
 #include <stdio.h>
+#include <math.h>
 
 CQuad::CQuad()
 {
@@ -45,12 +46,57 @@ void CQuad::boundingBox()
 	y0 = mVertices[0][1];
 	x1 = mVertices[1][0];
 	y1 = mVertices[1][1];
+	
+	int xm, ym;
+	getMedio(xm, ym);
+	glPointSize(4.0);
+	glBegin(GL_POINTS);
+		glVertex2i(x0, y0);
+		glVertex2i(x0, y1);
+		glVertex2i(x1, y0);
+		glVertex2i(xm, ym);
+		glVertex2i(x1, y1);
+	glEnd();
+	glPointSize(1.0);
 
-	rellenoCuadrado(x0 - 2, y0 - 2, x0 + 2, y0 + 2, mColor, mColor);
-	rellenoCuadrado(x1 - 2, y0 - 2, x1 + 2, y0 + 2, mColor, mColor);
-	rellenoCuadrado(x0 - 2, y1 - 2, x0 + 2, y1 + 2, mColor, mColor);
-	rellenoCuadrado(x1 - 2, y1 - 2, x1 + 2, y1 + 2, mColor, mColor);
+}
 
+void CQuad::getMedio(int &mx, int &my)
+{
+	int x0, y0, x1, y1;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+
+	int dx, dy;
+	dx = abs(x0 - x1);
+	dy = abs(y0 - y1);
+	int xmin = MIN(x0, x1);
+	int ymin = MIN(y0, y1);
+
+	mx = (dx / 2) + xmin;
+	my = (dy / 2) + ymin;
+
+}
+
+void CQuad::move(int xNew, int yNew)
+{
+	int x0, y0, x1, y1;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+
+	int puntoRestarX;
+	int puntoRestarY;
+	getMedio(puntoRestarX, puntoRestarY);
+	xNew = (xNew - puntoRestarX);
+	yNew = (yNew - puntoRestarY);
+	mVertices[0][0] = x0 + xNew;
+	mVertices[0][1] = y0 + yNew;
+	mVertices[1][0] = x1 + xNew;
+	mVertices[1][1] = y1 + yNew;
 
 }
 

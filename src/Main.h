@@ -6,7 +6,7 @@
 
 struct pair
 {
-	int x, y;
+	float x, y;
 };
 
 void pick(int x, int y);

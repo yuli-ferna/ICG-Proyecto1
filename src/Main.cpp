@@ -6,12 +6,15 @@
 #include "Elipse.h"
 #include "CurveB.h"
 #include "UserInterface.h"
+#include <stdio.h>
 
 using std::vector;
 
 GLFWwindow *gWindow;
 int gWidth, gHeight;
 bool gPress;
+bool bezier = false;
+bool tras = false;
 CUserInterface * userInterface;
 vector <CFigure *> figures;
 FigureType figureSelected;
@@ -116,8 +119,6 @@ void reshape(GLFWwindow *window, int width, int height)
 
 
 
-
-
 void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 	if (TwEventKeyGLFW(key, action))
@@ -193,9 +194,6 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 					figures[i + 1] = aux;
 				}
 				picked = figures.size() - 1;
-				/*picked = -1;
-				delete figures[figures.size() - 1];
-				figures.pop_back();*/
 
 			}
 			break;
@@ -210,11 +208,43 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 					figures[i - 1] = aux;
 				}
 				picked = 0;
-				/*picked = -1;
-				delete figures[figures.size() - 1];
-				figures.pop_back();*/
 
 			}
+			break;
+		case GLFW_KEY_N:
+			/*Un paso atras*/
+			if (picked > -1)
+			{
+				int newPicked = picked - 1;
+				if (newPicked >= 0)
+				{
+					CFigure *aux = figures[newPicked];
+					figures[newPicked] = figures[picked];
+					figures[picked] = aux;
+					picked = newPicked;
+				}
+
+			}
+			break;
+			
+		case GLFW_KEY_M:
+			/*Un paso delante*/
+			if (picked > -1)
+			{
+				int newPicked = picked + 1;
+				if (newPicked < figures.size())
+				{
+					CFigure *aux = figures[newPicked];
+					figures[newPicked] = figures[picked];
+					figures[picked] = aux;
+					picked = newPicked;
+				}
+			}
+			break;
+		case GLFW_KEY_K:
+			/*trasladar*/
+			figureSelected = TRASLADAR;
+			userInterface->hide();
 			break;
 		}
 
@@ -222,7 +252,7 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 }
 
 
-
+CTriangle *triangle;
 void mouseButton(GLFWwindow* window, int button, int action, int mods)
 {
 	if (TwEventMouseButtonGLFW(button, action))
@@ -238,7 +268,18 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods)
 		
 
 		if (figureSelected == NONE)
+		{
 			pick(int(ax), int(ay));
+			
+		}
+		else if (figureSelected == TRASLADAR)
+		{
+			if (picked > -1)
+			{
+				gPress = true;
+			}
+
+		}
 		else if (figureSelected == LINE)
 		{
 			CLine *line = new CLine();
@@ -260,54 +301,39 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods)
 		else if (figureSelected == TRIANGLE)
 		{
 			if (nLinea == 0) {
-				ptox = ax;
-				ptoy = ay;
+				triangle = new CTriangle();
+				triangle->setVertice(ax, ay);
+				//gPress = true;
 				nLinea++;
 			}
 			else if(nLinea == 1)
 			{
-				ptox2 = ax;
-				ptoy2 = ay;
+				triangle->setVertice(ax, ay);
+				figures.push_back(triangle);
+
+
 				nLinea++;
 
 			}
 			else
 			{
-				CTriangle *triangle = new CTriangle();
-				triangle->setVertex(0, ptox, ptoy);
-				triangle->setVertex(1,ptox2, ptoy2);
-				triangle->setVertex(2, ax, ay);
-				figures.push_back(triangle);
+				triangle->setVertice(ax, ay);
+				//figures.push_back(triangle);
 				nLinea = 0;
-				gPress = true;
+				gPress = false;
 
 			}
 		}
 		else if (figureSelected == BCURVE)
 		{
-			if (nPunto < 3) {
-				pair aux;
-				aux.x = ax;
-				aux.y = ay;
-				puntosC.push_back(aux);
-				nPunto++;
 
-			}
-			else
-			{
-				CCurveB *curve = new CCurveB();
-				int length = puntosC.size();
-				for (int ii = 0; ii < length; ii++)
-				{
-					curve->setVertex(ii, puntosC[ii].x, puntosC[ii].y);
-				}
-				curve->setVertex(length, ax, ay);
-				figures.push_back(curve);
-				nPunto = 0;
-				puntosC.clear();
-				gPress = false;
+			pair aux;
+			aux.x = ax;
+			aux.y = ay;
+			puntosC.push_back(aux);
+			bezier = true;
 
-			}
+				
 		}
 		else if (figureSelected == ELIPSE)
 		{
@@ -329,6 +355,25 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods)
 		}
 	}
 
+	/*evento curva*/
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS && !gPress && figureSelected == BCURVE)
+	{
+		float ax = float(x);
+		float ay = gHeight - float(y);
+
+		CCurveB *curve = new CCurveB(puntosC.size() + 1);
+		int length = puntosC.size();
+		for (int ii = 0; ii < length; ii++)
+		{
+			curve->setVertex(ii, puntosC[ii].x, puntosC[ii].y);
+		}
+		curve->setVertex(length, ax, ay);
+		figures.push_back(curve);
+		nPunto = 0;
+		puntosC.clear();
+		gPress = false;
+	}
+
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 		gPress = false;
 }
@@ -338,12 +383,21 @@ void cursorPos(GLFWwindow* window, double x, double y)
 	if (TwEventMousePosGLFW(int(x), int(y)))
 		return;
 
-	if (gPress && (figureSelected == TRIANGLE))
+	if (gPress && (figureSelected == TRASLADAR))
+	{
+		if (picked > -1)
+		{
+			float ax = float(x);
+			float ay = gHeight - float(y);
+			figures[picked]->move(ax, ay);
+		}
+	}
+	else if (gPress && (figureSelected == TRIANGLE))
 	{
 		float ax = float(x);
 		float ay = gHeight - float(y);
 
-		figures.back()->setVertex(2, ax, ay);
+		figures.back()->setVertice(ax, ay);
 	}
 	else if (gPress && (figureSelected == BCURVE))
 	{
@@ -386,7 +440,7 @@ bool initGlfw()
 	if (!glfwInit())
 		return false;
 
-	gWindow = glfwCreateWindow(gWidth, gHeight, "Paint arrechísimo", NULL, NULL);
+	gWindow = glfwCreateWindow(gWidth, gHeight, "Paint Yuliana Fernandez", NULL, NULL);
 
 	if (!gWindow)
 	{

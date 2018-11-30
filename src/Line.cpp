@@ -1,4 +1,7 @@
 #include "Line.h"
+#include <math.h>
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 CLine::CLine()
 {
@@ -38,45 +41,54 @@ void CLine::boundingBox()
 	y0 = mVertices[0][1];
 	x1 = mVertices[1][0];
 	y1 = mVertices[1][1];
-	
-	rellenoCuadrado(x0 - 2, y0 - 2, x0 + 2, y0 + 2);
-	rellenoCuadrado(x1 - 2, y1 - 2, x1 + 2, y1 + 2);
+	int xm, ym;
+	getMedio(xm, ym);
+	glPointSize(4.0);
+	glBegin(GL_POINTS);
+		glVertex2i(x0, y0);
+		glVertex2i(xm, ym);
+		glVertex2i(x1, y1);
+	glEnd();
+	glPointSize(1.0);
+
 }
 
-void CLine::rellenoCuadrado(int x0, int y0, int x1, int y1) {
+void CLine::getMedio(int &mx, int &my) 
+{
+	int x0, y0, x1, y1;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	
+	int dx, dy;
+	dx = abs(x0 - x1);
+	dy = abs(y0 - y1);
+	int xmin = MIN(x0, x1);
+	int ymin = MIN(y0, y1);
+	
+	mx = (dx / 2) + xmin;
+	my = (dy / 2) + ymin;
 
-	int xmin, xmax, ymin, ymax, it;
-	xmin = x0;
-	xmax = x1;
-	ymin = y0;
-	ymax = y1;
+}
 
-	if (x0 > x1)
-	{
-		xmax = x0;
-		xmin = x1;
+void CLine::move(int xNew, int yNew)
+{
+	int x0, y0, x1, y1;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
 
-	}
-	if (y0 > y1)
-	{
-		ymax = y0;
-		ymin = y1;
-	}
-	glColor3fv(mColor);
-
-	//Colorear dos primeras lineas
-	drawLineC0a45(xmin, ymin, xmax, ymin);
-	drawLineC0a45(xmin, ymax, xmax, ymax);
-	it = ymin + 1;
-
-	for (int i = it; i < ymax; i++)
-	{
-		PutPixel(xmin, i, mColor);
-		drawLineC0a45(xmin + 1, i, xmax - 1, i);
-		PutPixel(xmax, i, mColor);
-
-	}
-
+	int puntoRestarX;
+	int puntoRestarY;
+	getMedio(puntoRestarX, puntoRestarY);
+	xNew = (xNew - puntoRestarX);
+	yNew = (yNew - puntoRestarY);
+	mVertices[0][0] = x0 + xNew;
+	mVertices[0][1] = y0 + yNew;
+	mVertices[1][0] = x1 + xNew ;
+	mVertices[1][1] = y1 + yNew ;
 
 }
 
@@ -89,7 +101,6 @@ void CLine::PutPixel(int x, int y, float mColor[3])
 	glEnd();
 }
 
-
 //Principales
 //0 a 45
 void CLine::drawLineC0a45(int x0, int y0, int x1, int y1) {
@@ -100,10 +111,6 @@ void CLine::drawLineC0a45(int x0, int y0, int x1, int y1) {
 	//Delta x y y
 	dx = x1 - x0;
 	dy = y1 - y0;
-
-	if (dy > dx) {
-
-	}
 
 	//Función paramétrica de la recta
 	//Se le multiplica dos para evitar división

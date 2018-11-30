@@ -118,15 +118,51 @@ void CCircle::boundingBox()
 	dy = abs(y0 - y1);
 	int r = dx;
 	x = 0;
+	if (dy > dx)
+	{
+		r = dy;
+	}
+	pintarContorno(r + x0 + 2, r + y0 + 2, -r + x0 - 2, -r + y0 - 2, mColor);
+
+}
+
+void CCircle::move(int xNew, int yNew)
+{
+	int x0, y0, x1, y1;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	
+	int dx, dy, x, y;
+	dx = abs(x0 - x1);
+	dy = abs(y0 - y1);
+	int r = dx;
+	x = 0;
 	y = r;
 	if (dy > dx)
 	{
 		r = dy;
 		y = r;
 	}
-	pintarContorno(r + x0 + 2, r + y0 + 2, -r + x0 - 2, -r + y0 - 2, mColor);
+	int puntoRestarX;
+	int puntoRestarY;
+	getMedio(puntoRestarX, puntoRestarY);
+	xNew = (xNew - puntoRestarX);
+	yNew = (yNew - puntoRestarY);
+	mVertices[0][0] = x0 + xNew;
+	mVertices[0][1] = y0 + yNew;
+	mVertices[1][0] = x1 + xNew;
+	mVertices[1][1] = y1 + yNew;
+}
 
-
+void CCircle::getMedio(int &mx, int &my)
+{
+	int x0, y0;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	my = y0;
+	mx = x0;
 }
 
 void CCircle::pintarContorno(int x0, int y0, int x1, int y1, float mColor[3]) {

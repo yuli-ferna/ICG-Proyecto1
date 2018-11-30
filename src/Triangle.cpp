@@ -1,92 +1,220 @@
 #include "Triangle.h"
 #include <stdio.h>
+#include <math.h>
+
 
 CTriangle::CTriangle()
 {
+	/*
 	mVertices = new float*[3];
 	for (int i = 0; i < 3; ++i)
 		mVertices[i] = new float[2];
-
+	*/
 	mType = TRIANGLE;
 }
 
 CTriangle::~CTriangle()
 {
-	for (int i = 0; i < 3; ++i)
-		delete[] mVertices[i];
+	/*for (int i = 0; i < 3; ++i)
+		delete[] mVertices[i];*/
 }
 
 void CTriangle::display()
 {
 	glColor3fv(mColor);
 	int x0, y0, x1, y1, x2, y2;
-	x0 = mVertices[0][0];
-	y0 = mVertices[0][1];
-	x1 = mVertices[1][0];
-	y1 = mVertices[1][1];
-	x2 = mVertices[2][0];
-	y2 = mVertices[2][1];
+	x0 = vVertices[0].x;
+	y0 = vVertices[0].y;
+	x1 = vVertices[1].x;
+	y1 = vVertices[1].y;
+	if (vVertices.size() > 2)
+	{
+		x2 = vVertices[2].x;
+		y2 = vVertices[2].y;
+
+	}
+
+
+	if (relleno && vVertices.size() > 2)
+	{
+		scanLine(x0, x1, x2, y0, y1, y2);
+	}
 
 	drawLine(x0, y0, x1, y1);
-	drawLine(x1, y1, x2, y2);
-	drawLine(x2, y2, x0, y0);
-	
+	if (vVertices.size() > 2)
+	{
+		drawLine(x1, y1, x2, y2);
+		drawLine(x2, y2, x0, y0);
 
+	}
+
+
+
+}
+
+
+void CTriangle::getMedio(int &mx, int &my)
+{
+	int x0, y0, x1, y1, x2, y2;
+	x0 = vVertices[0].x;
+	y0 = vVertices[0].y;
+	x1 = vVertices[1].x;
+	y1 = vVertices[1].y;
+	x2 = vVertices[2].x;
+	y2 = vVertices[2].y;
+
+	int ymin = ceil(MIN3(y0, y1, y2));
+	int xmin = ceil(MIN3(x0, x1, x2));
+
+	int ymax = floor(MAX3(y0, y1, y2));
+	int xmax = floor(MAX3(x0, x1, x2));
+
+
+	int dx, dy;
+	dx = abs(xmax - xmin);
+	dy = abs(ymax - ymin);
+
+	mx = (dx / 2) + xmin;
+	my = (dy / 2) + ymin;
+
+}
+
+void CTriangle::move(int xNew, int yNew)
+{
+	int x0, y0, x1, y1, x2, y2;
+	x0 = vVertices[0].x;
+	y0 = vVertices[0].y;
+	x1 = vVertices[1].x;
+	y1 = vVertices[1].y;
+	x2 = vVertices[2].x;
+	y2 = vVertices[2].y;
+
+	int puntoRestarX;
+	int puntoRestarY;
+	getMedio(puntoRestarX, puntoRestarY);
+	
+	xNew = (xNew - puntoRestarX);
+	yNew = (yNew - puntoRestarY);
+	vVertices[0].x = x0 + xNew;
+	vVertices[0].y= y0 + yNew;
+	vVertices[1].x = x1 + xNew;
+	vVertices[1].y= y1 + yNew;
+	vVertices[2].x = x2 + xNew;
+	vVertices[2].y= y2 + yNew;
+
+}
+
+
+void CTriangle::scanLine(int x0, int  x1, int x2, int y0, int y1, int y2)
+{
+	int ymin = ceil(MIN3(y0, y1, y2));
+	int ymax = floor(MAX3(y0, y1, y2));
+	int xmin;
+	int xmax;
+
+
+	for (int yy = ymin; yy <= ymax; yy++)
+	{
+		intersection(x0, y0, x1, y1, x2, y2, yy, xmin, xmax);
+
+		for (int xx = ceil(xmin); xx <= floor(xmax); xx++)
+		{
+			PutPixel(xx, yy, mRColor);
+		}
+	}
+
+}
+
+void CTriangle::intersection(int x0, int y0, int x1, int y1, int x2, int y2, int yy, int &xmin, int &xmax)
+{
+
+}
+
+int CTriangle::MAX3(int a, int b, int c)
+{
+	if (a >= b && a >= c)
+	{
+		return a;
+	}
+	else if (b >= c && b >= a)
+	{
+		return b;
+	}
+	else
+	{
+		return c;
+	} 
+}
+
+int CTriangle::MIN3(int a, int b, int c)
+{
+	if (a <= b && a <= c)
+	{
+		return a;
+	}
+	else if (b <= c && b <= a)
+	{
+		return b;
+	}
+	else
+	{
+		return c;
+	}
 }
 
 void CTriangle::boundingBox()
 {
 	int x0, y0, x1, y1, x2, y2;
-	x0 = mVertices[0][0];
-	y0 = mVertices[0][1];
-	x1 = mVertices[1][0];
-	y1 = mVertices[1][1];
-	x2 = mVertices[2][0];
-	y2 = mVertices[2][1];
+	x0 = vVertices[0].x;
+	y0 = vVertices[0].y;
+	x1 = vVertices[1].x;
+	y1 = vVertices[1].y;
+	x2 = vVertices[2].x;
+	y2 = vVertices[2].y;
 
-	rellenoCuadrado(x0 - 2, y0 - 2, x0 + 2, y0 + 2);
-	rellenoCuadrado(x1 - 2, y1 - 2, x1 + 2, y1 + 2);
-	rellenoCuadrado(x2 - 2, y2 - 2, x2 + 2, y2 + 2);
+	pintarContorno(MAX3(x0,x1,x2), MAX3(y0, y1, y2), MIN3(x0, x1, x2), MIN3(y0, y1, y2));
 
 }
 
-void CTriangle::rellenoCuadrado(int x0, int y0, int x1, int y1) {
+void CTriangle::pintarContorno(int x0, int y0, int x1, int y1) {
 
-	int xmin, xmax, ymin, ymax, it;
-	xmin = x0;
-	xmax = x1;
-	ymin = y0;
-	ymax = y1;
-
-	if (x0 > x1)
+	if (x0 <= x1)
 	{
-		xmax = x0;
-		xmin = x1;
+		drawLineC0a45(x0, y0, x1, y0);
+		drawLineC0a45(x0, y1, x1, y1);
+		if (y0 <= y1)
+		{
 
+			drawLineC45a90(x0, y0, x0, y1);
+			drawLineC45a90(x1, y0, x1, y1);
+
+		}
+		else
+		{
+			drawLineC45a90(x0, y1, x0, y0);
+			drawLineC45a90(x1, y1, x1, y0);
+
+		}
 	}
-	if (y0 > y1)
+	else
 	{
-		ymax = y0;
-		ymin = y1;
+		drawLineC0a45(x1, y0, x0, y0);
+		drawLineC0a45(x1, y1, x0, y1);
+		if (y0 <= y1)
+		{
+
+			drawLineC45a90(x0, y0, x0, y1);
+			drawLineC45a90(x1, y0, x1, y1);
+
+		}
+		else
+		{
+			drawLineC45a90(x0, y1, x0, y0);
+			drawLineC45a90(x1, y1, x1, y0);
+
+		}
 	}
-	glColor3fv(mColor);
-
-	//Colorear dos primeras lineas
-	drawLineC0a45(xmin, ymin, xmax, ymin);
-	drawLineC0a45(xmin, ymax, xmax, ymax);
-	it = ymin + 1;
-
-	for (int i = it; i < ymax; i++)
-	{
-		PutPixel(xmin, i, mColor);
-		drawLineC0a45(xmin + 1, i, xmax - 1, i);
-		PutPixel(xmax, i, mColor);
-
-	}
-
-
 }
-
 void CTriangle::PutPixel(int x, int y, float mColor[3])
 {
 	glColor3fv(mColor);
@@ -106,10 +234,6 @@ void CTriangle::drawLineC0a45(int x0, int y0, int x1, int y1) {
 	//Delta x y y
 	dx = x1 - x0;
 	dy = y1 - y0;
-
-	if (dy > dx) {
-
-	}
 
 	//Función paramétrica de la recta
 	//Se le multiplica dos para evitar división

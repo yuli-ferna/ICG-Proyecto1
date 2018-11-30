@@ -40,6 +40,7 @@ CUserInterface::CUserInterface()
 	TwAddVarRW(mUserInterface, "colorR", TW_TYPE_COLOR3F, &mFigureRColor[0], "label = 'Color Relleno'");
 	TwAddSeparator(mUserInterface, "sep2", NULL);
 	TwAddVarRW(mUserInterface, "relleno", TW_TYPE_BOOLCPP, &fill, "label = 'Relleno'");
+	//TwAddVarRW(mUserInterface, "", TW_TYPE_INT8, &fill, "label = 'Up'");
 	
 }
 

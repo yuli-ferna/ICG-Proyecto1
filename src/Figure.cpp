@@ -1,4 +1,5 @@
 #include "Figure.h"
+#include <math.h>
 
 CFigure::CFigure()
 {
@@ -17,30 +18,21 @@ void CFigure::setVertex(int id, float x, float y)
 	mVertices[id][1] = y;
 }
 
+/*vertices triangulo y bezier*/
+void CFigure::setVertice(float x, float y)
+{
+	pairF a;
+	a.x = x;
+	a.y = y;
+	vVertices.push_back(a);
+}
+
 void CFigure::setColor(float r, float g, float b)
 {
 	mColor[0] = r;
 	mColor[1] = g;
 	mColor[2] = b;
 }
-/*
-void CFigure::swapF(CFigure* a, CFigure* b)
-{
-	CFigure * c = a;
-	a = b;
-	b = c;
-}
-
-void CFigure::eliminar(int picked)
-{
-	int nFig = figures.size();
-	for (int ii = picked; ii < nFig + 1; ii++)
-	{
-		swapF(figures[ii], figures[ii + 1]);
-	}
-	figures.pop_back();
-	picked = -1;
-}*/
 
 void CFigure::setRColor(float r, float g, float b)
 {
@@ -89,6 +81,24 @@ float * CFigure::getRColor()
 	return mRColor;
 }
 
+void CFigure::getMedio(float &mx, float &my)
+{
+	int x0, y0, x1, y1;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+
+	int dx, dy;
+	dx = abs(x0 - x1);
+	dy = abs(y0 - y1);
+	int xmin = MIN(x0, x1);
+	int ymin = MIN(y0, y1);
+
+	mx = (dx / 2) + xmin;
+	my = (dy / 2) + ymin;
+
+}
 
 void CFigure::swap(int & a, int & b)
 {

@@ -10,6 +10,8 @@ class CQuad : public CFigure
 		~CQuad();
 		void display();
 		void boundingBox();
+		void getMedio(int & mx, int & my);
+		void move(int xNew, int yNew);
 		void rellenoCuadrado(int x0, int y0, int x1, int y1, float mColor[3], float mRColor[3]);
 		void pintarContorno(int x0, int y0, int x1, int y1, float mColor[3]);
 		void drawLineC0a45(int x0, int y0, int x1, int y1, float color[3]);
