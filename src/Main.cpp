@@ -252,7 +252,7 @@ void keyInput(GLFWwindow *window, int key, int scancode, int action, int mods)
 }
 
 
-CTriangle *triangle;
+
 void mouseButton(GLFWwindow* window, int button, int action, int mods)
 {
 	if (TwEventMouseButtonGLFW(button, action))
@@ -301,26 +301,26 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods)
 		else if (figureSelected == TRIANGLE)
 		{
 			if (nLinea == 0) {
-				triangle = new CTriangle();
-				triangle->setVertice(ax, ay);
-				//gPress = true;
+				ptox = ax;
+				ptoy = ay;
 				nLinea++;
 			}
 			else if(nLinea == 1)
 			{
-				triangle->setVertice(ax, ay);
-				figures.push_back(triangle);
-
-
+				ptox2 = ax;
+				ptoy2 = ay;
 				nLinea++;
 
 			}
 			else
 			{
-				triangle->setVertice(ax, ay);
-				//figures.push_back(triangle);
+				CTriangle *triangle = new CTriangle();
+				triangle->setVertex(0, ptox, ptoy);
+				triangle->setVertex(1,ptox2, ptoy2);
+				triangle->setVertex(2, ax, ay);
+				figures.push_back(triangle);
 				nLinea = 0;
-				gPress = false;
+				gPress = true;
 
 			}
 		}
@@ -331,8 +331,6 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods)
 			aux.x = ax;
 			aux.y = ay;
 			puntosC.push_back(aux);
-			bezier = true;
-
 				
 		}
 		else if (figureSelected == ELIPSE)
@@ -397,7 +395,7 @@ void cursorPos(GLFWwindow* window, double x, double y)
 		float ax = float(x);
 		float ay = gHeight - float(y);
 
-		figures.back()->setVertice(ax, ay);
+		figures.back()->setVertex(2, ax, ay);
 	}
 	else if (gPress && (figureSelected == BCURVE))
 	{

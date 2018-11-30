@@ -18,15 +18,6 @@ void CFigure::setVertex(int id, float x, float y)
 	mVertices[id][1] = y;
 }
 
-/*vertices triangulo y bezier*/
-void CFigure::setVertice(float x, float y)
-{
-	pairF a;
-	a.x = x;
-	a.y = y;
-	vVertices.push_back(a);
-}
-
 void CFigure::setColor(float r, float g, float b)
 {
 	mColor[0] = r;

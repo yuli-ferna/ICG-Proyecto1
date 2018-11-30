@@ -2,9 +2,6 @@
 
 #include "../headers/glfw3.h"
 
-#include <vector>
-using std::vector;
-
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
@@ -26,16 +23,12 @@ protected:
 	float **mVertices, mColor[3], mRColor[3];
 	bool relleno, boundB;
 	int mType;
-	struct pairF
-	{
-		float x, y;
-	};
-	vector<pairF> vVertices;
+	float colorL[3] = { 1.0,0.0,0.0 };
+
 public:
 	CFigure();
 	virtual ~CFigure();
 	void setVertex(int id, float x, float y);
-	void setVertice(float x, float y);
 	void setColor(float r, float g, float b);
 	void setRColor(float r, float g, float b);
 	void setRelleno(bool r);

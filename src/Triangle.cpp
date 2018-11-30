@@ -2,53 +2,42 @@
 #include <stdio.h>
 #include <math.h>
 
-
 CTriangle::CTriangle()
 {
-	/*
 	mVertices = new float*[3];
 	for (int i = 0; i < 3; ++i)
 		mVertices[i] = new float[2];
-	*/
+
 	mType = TRIANGLE;
 }
 
 CTriangle::~CTriangle()
 {
-	/*for (int i = 0; i < 3; ++i)
-		delete[] mVertices[i];*/
+	for (int i = 0; i < 3; ++i)
+		delete[] mVertices[i];
 }
 
 void CTriangle::display()
 {
 	glColor3fv(mColor);
 	int x0, y0, x1, y1, x2, y2;
-	x0 = vVertices[0].x;
-	y0 = vVertices[0].y;
-	x1 = vVertices[1].x;
-	y1 = vVertices[1].y;
-	if (vVertices.size() > 2)
-	{
-		x2 = vVertices[2].x;
-		y2 = vVertices[2].y;
-
-	}
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	x2 = mVertices[2][0];
+	y2 = mVertices[2][1];
 
 
-	if (relleno && vVertices.size() > 2)
+	/*if (relleno)
 	{
 		scanLine(x0, x1, x2, y0, y1, y2);
-	}
+	}*/
 
 	drawLine(x0, y0, x1, y1);
-	if (vVertices.size() > 2)
-	{
-		drawLine(x1, y1, x2, y2);
-		drawLine(x2, y2, x0, y0);
-
-	}
-
-
+	drawLine(x1, y1, x2, y2);
+	drawLine(x2, y2, x0, y0);
+	
 
 }
 
@@ -56,12 +45,12 @@ void CTriangle::display()
 void CTriangle::getMedio(int &mx, int &my)
 {
 	int x0, y0, x1, y1, x2, y2;
-	x0 = vVertices[0].x;
-	y0 = vVertices[0].y;
-	x1 = vVertices[1].x;
-	y1 = vVertices[1].y;
-	x2 = vVertices[2].x;
-	y2 = vVertices[2].y;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	x2 = mVertices[2][0];
+	y2 = mVertices[2][1];
 
 	int ymin = ceil(MIN3(y0, y1, y2));
 	int xmin = ceil(MIN3(x0, x1, x2));
@@ -82,12 +71,12 @@ void CTriangle::getMedio(int &mx, int &my)
 void CTriangle::move(int xNew, int yNew)
 {
 	int x0, y0, x1, y1, x2, y2;
-	x0 = vVertices[0].x;
-	y0 = vVertices[0].y;
-	x1 = vVertices[1].x;
-	y1 = vVertices[1].y;
-	x2 = vVertices[2].x;
-	y2 = vVertices[2].y;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	x2 = mVertices[2][0];
+	y2 = mVertices[2][1];
 
 	int puntoRestarX;
 	int puntoRestarY;
@@ -95,12 +84,12 @@ void CTriangle::move(int xNew, int yNew)
 	
 	xNew = (xNew - puntoRestarX);
 	yNew = (yNew - puntoRestarY);
-	vVertices[0].x = x0 + xNew;
-	vVertices[0].y= y0 + yNew;
-	vVertices[1].x = x1 + xNew;
-	vVertices[1].y= y1 + yNew;
-	vVertices[2].x = x2 + xNew;
-	vVertices[2].y= y2 + yNew;
+	mVertices[0][0] = x0 + xNew;
+	mVertices[0][1] = y0 + yNew;
+	mVertices[1][0] = x1 + xNew;
+	mVertices[1][1] = y1 + yNew;
+	mVertices[2][0] = x2 + xNew;
+	mVertices[2][1] = y2 + yNew;
 
 }
 
@@ -165,15 +154,23 @@ int CTriangle::MIN3(int a, int b, int c)
 void CTriangle::boundingBox()
 {
 	int x0, y0, x1, y1, x2, y2;
-	x0 = vVertices[0].x;
-	y0 = vVertices[0].y;
-	x1 = vVertices[1].x;
-	y1 = vVertices[1].y;
-	x2 = vVertices[2].x;
-	y2 = vVertices[2].y;
+	x0 = mVertices[0][0];
+	y0 = mVertices[0][1];
+	x1 = mVertices[1][0];
+	y1 = mVertices[1][1];
+	x2 = mVertices[2][0];
+	y2 = mVertices[2][1];
+	glColor3fv(colorL);
 
 	pintarContorno(MAX3(x0,x1,x2), MAX3(y0, y1, y2), MIN3(x0, x1, x2), MIN3(y0, y1, y2));
-
+	glColor3fv(mColor);
+	glPointSize(4.0);
+	glBegin(GL_POINTS);
+	glVertex2i(x0, y0);
+	glVertex2i(x1, y1);
+	glVertex2i(x2, y2);
+	glEnd();
+	glPointSize(1.0);
 }
 
 void CTriangle::pintarContorno(int x0, int y0, int x1, int y1) {
@@ -218,7 +215,6 @@ void CTriangle::pintarContorno(int x0, int y0, int x1, int y1) {
 void CTriangle::PutPixel(int x, int y, float mColor[3])
 {
 	glColor3fv(mColor);
-
 	glBegin(GL_POINTS);
 	glVertex2i(x, y);
 	glEnd();

@@ -6,7 +6,7 @@ CCurveB::CCurveB(int NV)
 	mVertices = new float*[NV];
 	for (int i = 0; i < NV; ++i)
 		mVertices[i] = new float[2];
-
+	
 	mType = BCURVE;
 }
 

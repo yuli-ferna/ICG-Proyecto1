@@ -50,7 +50,7 @@ void CElipse::boundingBox()
 	a = dx; //El y se mantiene
 	b = dy; //Tiene que ser una altura
 	
-	pintarContorno(a + cx + 2, b + cy + 2, -a + cx - 2, -b + cy - 2, mColor);
+	pintarContorno(a + cx + 2, b + cy + 2, -a + cx - 2, -b + cy - 2, colorL);
 	
 }
 
